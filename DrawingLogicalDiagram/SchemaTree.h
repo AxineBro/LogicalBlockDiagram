@@ -26,7 +26,7 @@
 class SchemaTree : public QObject{
     Q_OBJECT
 
-private:
+public:
     /**
      * @struct Node
      * @brief Узел дерева разбора
@@ -52,7 +52,6 @@ public:
     /**
      * @brief Конструктор дерева из логического выражения
      * @param text Логическое выражение в инфиксной нотации
-     * @throws ParseError если выражение синтаксически некорректно
      *
      * Поддерживаемые операторы:
      * - & (AND), | (OR), ^ (XOR), ! (NOT)
@@ -76,6 +75,16 @@ public:
     int getHeight() const;
 
     /**
+     * @brief Получить высоту узла
+     * @param узел дерева
+     * @return Высота узла в узлах
+     *
+     * Высота вычисляется как максимальная глубина от текущего узла до листа.
+     * Для листа возвращает 0.
+     */
+    int getHeightNode(const std::unique_ptr<Node>& node) const;
+
+    /**
      * @brief Получить ширину дерева
      * @return Ширина дерева в узлах
      *
@@ -83,6 +92,16 @@ public:
      * Для пустого дерева возвращает 0.
      */
     int getWidth() const;
+
+    /**
+     * @brief Получить ширину уровня
+     * @param узел дерева
+     * @return Ширина уровня в узлах
+     *
+     * Ширина вычисляется как максимальное количество узлов на одном уровне.
+     * Для пустого уровня возвращает 0.
+     */
+    int getWidthNode(const std::unique_ptr<Node>& node) const;
 
     /**
      * @brief Получить корень дерева
@@ -122,23 +141,23 @@ private:
 
     /**
      * @brief Посчитать высоту дерева
-     * @param root корень дерева,
+     * @param root корень дерева
      * @return Высота дерева в узлах
      *
      * Высота вычисляется как максимальная глубина от корня до листа.
      * Для пустого дерева возвращает 0.
      */
-    int calculateHeight(const std::unique_ptr<Node>& node);
+    int calculateHeight(const std::unique_ptr<Node>& node) const;
 
     /**
      * @brief Посчитать ширину дерева
-     * @param root корень дерева,
+     * @param root корень дерева
      * @return Ширина дерева в узлах
      *
      * Ширина вычисляется как максимальное количество узлов на одном уровне.
      * Для пустого дерева возвращает 0.
      */
-    int calculateWidth(const std::unique_ptr<Node>& node);
+    int calculateWidth(const std::unique_ptr<Node>& node) const;
 
     /**
      * @brief Вспомогательный метод отрисовки дерева

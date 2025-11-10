@@ -8,14 +8,24 @@ SchemaTree::SchemaTree(const QString& text){
     width = calculateWidth(root);
 }
 
-// Получить высоту
+// Получить высоту дерева
 int  SchemaTree::getHeight() const{
     return height;
 }
 
-// Получить ширину
+// Получить высоту узла
+int  SchemaTree::getHeightNode(const std::unique_ptr<Node>& node) const{
+    return SchemaTree::calculateHeight(node);
+}
+
+// Получить ширину дерева
 int SchemaTree::getWidth() const{
     return width;
+}
+
+// Получить ширину узла
+int  SchemaTree::getWidthNode(const std::unique_ptr<Node>& node) const{
+    return SchemaTree::calculateWidth(node);
 }
 
 // Получить корень
@@ -24,7 +34,7 @@ const SchemaTree::Node* SchemaTree::getRoot() const {
 }
 
 // Посчитать высоту
-int SchemaTree::calculateHeight(const std::unique_ptr<SchemaTree::Node>& node) {
+int SchemaTree::calculateHeight(const std::unique_ptr<SchemaTree::Node>& node) const{
     if (!node) return 0;
 
     int maxHeight = 0;
@@ -36,7 +46,7 @@ int SchemaTree::calculateHeight(const std::unique_ptr<SchemaTree::Node>& node) {
 }
 
 // Посчитать ширину
-int SchemaTree::calculateWidth(const std::unique_ptr<SchemaTree::Node>& node) {
+int SchemaTree::calculateWidth(const std::unique_ptr<SchemaTree::Node>& node) const{
     if (!node) return 0;
     if (node->children.empty()) return 1;
 
@@ -93,7 +103,7 @@ void SchemaTree::buildTree(const QString& text) {
         root.reset();
 }
 
-
+// Вспомогательная функция для построения дерева
 std::vector<std::unique_ptr<SchemaTree::Node>> SchemaTree::buildTreeHelper(const QString& expr)
 {
     std::vector<std::unique_ptr<Node>> nodes;
