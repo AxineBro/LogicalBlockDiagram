@@ -32,7 +32,7 @@ QGraphicsScene* DrawingDiagram::buildScene()
     bool isGlobalNot = (root->type == NodeType::NOT);
     const SchemaTree::Node* centralNode = isGlobalNot ? root->children[0].get() : root;
     int totalNodes = countAllNodes(centralNode);
-    qreal coefficient = (sceneHeight - 100) / totalNodes;
+    qreal coefficient = (sceneHeight - 50) / totalNodes;
     qreal widthFactor = 2.0; // Фактор для увеличения ширины (можно настроить)
     qreal widthCoefficient = coefficient * widthFactor;
     int treeDepth = calculateHeight(centralNode);
@@ -43,7 +43,7 @@ QGraphicsScene* DrawingDiagram::buildScene()
     qreal rectX = centerX - centralWidth / 2;
     qreal rectY = centerY - centralHeight / 2;
     varLevelX = rectX - 100;  // единый уровень для всех переменных
-    scene->addRect(rectX, rectY, centralWidth, centralHeight, QPen(Qt::black, 2), QBrush(Qt::NoBrush));
+    scene->addRect(rectX, rectY, centralWidth, centralHeight, QPen(Qt::darkBlue, 1), QBrush(Qt::NoBrush));
     qreal diameter = coefficient * 0.4 * widthFactor; // Масштабируем диаметр для пропорций
     qreal rightmostX;
     if (isGlobalNot) {
@@ -77,14 +77,30 @@ QGraphicsScene* DrawingDiagram::buildScene()
             currentY += childAlloc;
         }
     }
-    qreal outputLineLength = widthCoefficient * 3;
+    qreal outputLineLength = 100;
     qreal outputEndX = rightmostX + outputLineLength;
     scene->addLine(rightmostX, centerY, outputEndX, centerY, QPen(Qt::black, 2));
     auto* yText = scene->addText("Y");
+    auto* outText = scene->addText(generator.generateName(NameFormat::NUMERIC_PREFIX));
+    auto* logicText = scene->addText(generator.generateName(NameFormat::LOGIC_SUFFIX));
+    auto* letterText = scene->addText(generator.generateName(NameFormat::LETTER_PREFIX));
     yText->setDefaultTextColor(Qt::black);
+    outText->setDefaultTextColor(Qt::darkGreen);
+    logicText->setDefaultTextColor(Qt::black);
+    letterText->setDefaultTextColor(Qt::black);
     qreal yW = yText->boundingRect().width();
     qreal yH = yText->boundingRect().height();
-    yText->setPos(outputEndX + 5, centerY - yH / 2);
+    yText->setPos(rectX + centralWidth - 5 - yW, centerY - yH / 2);
+    qreal boxSize = coefficient * 0.35;  // хороший масштаб
+    if (boxSize < 10) boxSize = 10;
+    qreal boxX  = outputEndX - (boxSize/2);   // единый X
+    qreal boxY  = centerY - (boxSize/2);
+    scene->addRect(boxX, boxY, boxSize, boxSize, QPen(Qt::black, 2), QBrush(Qt::NoBrush));
+    outText->setPos(outputEndX + boxSize + 10, centerY - yH / 2);
+    qreal loigcH = yText->boundingRect().height();
+    logicText->setPos(rectX + centralWidth, centralHeight + 25 + (25-loigcH) / 2);
+    qreal letterH = yText->boundingRect().height();
+    letterText->setPos(rectX + centralWidth, (25-letterH) / 2);
     return scene;
 }
 
@@ -156,7 +172,7 @@ void DrawingDiagram::drawNode(QGraphicsScene* scene,
         qreal boxSize = coefficient * 0.35;  // хороший масштаб
         if (boxSize < 10) boxSize = 10;
         text->setDefaultTextColor(Qt::black);
-        textN->setDefaultTextColor(Qt::black);
+        textN->setDefaultTextColor(Qt::darkGreen);
 
         qreal textNW = textN->boundingRect().width();
         qreal textH = text->boundingRect().height();
@@ -167,7 +183,7 @@ void DrawingDiagram::drawNode(QGraphicsScene* scene,
         qreal textX  = varLevelX + 105;   // единый X
         qreal textY = connectY - textH / 2;
 
-        qreal textNX  = varLevelX - 20 - textNW;   // единый X
+        qreal textNX  = varLevelX - 10 - textNW - boxSize;   // единый X
 
         text->setPos(textX, textY);
         textN->setPos(textNX, textY);
@@ -213,9 +229,17 @@ void DrawingDiagram::drawNode(QGraphicsScene* scene,
         qreal rectX = connectX;
         qreal rectY = connectY - rectHeight / 2;
 
-        scene->addRect(rectX, rectY, rectWidth, rectHeight, QPen(Qt::black, 2));
+        scene->addRect(rectX, rectY, rectWidth, rectHeight, QPen(Qt::darkBlue, 1));
 
-        auto* opText = scene->addText(node->value);
+        QString displayText;
+        if (node->value == "|") {
+            displayText = "1";
+        } else if (node->value == "^") {
+            displayText = "=1";
+        } else {
+            displayText = node->value;
+        }
+        auto* opText = scene->addText(displayText);
         opText->setDefaultTextColor(Qt::blue);
         qreal opW = opText->boundingRect().width();
         opText->setPos(rectX + rectWidth - opW - 5, rectY + 5);
