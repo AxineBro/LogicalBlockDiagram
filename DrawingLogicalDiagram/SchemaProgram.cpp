@@ -1,7 +1,13 @@
-#include <SchemaProgram.h>
+#include "SchemaProgram.h"
+#include "DrawingDiagram.h"
 
-// Реализация конструктора
-SchemaProgram::SchemaProgram(const QString& text){
-    SchemaTree tree = SchemaTree(text);
-    tree.getRoot();
+SchemaProgram::SchemaProgram(const QString& text, QGraphicsView* view)
+{
+    SchemaTree tree(text);
+    DrawingDiagram diagram(tree.getRoot(), view);
+
+    QGraphicsScene* scene = diagram.buildScene();
+    view->setScene(scene);
+    view->setRenderHint(QPainter::Antialiasing);
+    view->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
 }

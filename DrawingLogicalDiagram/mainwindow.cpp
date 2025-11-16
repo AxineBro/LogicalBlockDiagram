@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <SchemaTree.h>
+#include <SchemaProgram.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,5 +21,6 @@ void MainWindow::on_executeButton_clicked()
     QString text = ui->inputEdit->text();
     SchemaTree tree = SchemaTree(text);
     tree.printTree();
+    SchemaProgram program(text, ui->graphicsView);
 }
 

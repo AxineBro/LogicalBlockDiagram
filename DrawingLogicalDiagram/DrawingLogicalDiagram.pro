@@ -9,6 +9,8 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    DrawingDiagram.cpp \
+    NameGenerator.cpp \
     SchemaProgram.cpp \
     SchemaTree.cpp \
     main.cpp \
@@ -16,6 +18,8 @@ SOURCES += \
 
 HEADERS += \
     DrawingDiagram.h \
+    NameGenerator.h \
+    NamingType.h \
     SchemaProgram.h \
     SchemaTree.h \
     SchemaTypes.h \

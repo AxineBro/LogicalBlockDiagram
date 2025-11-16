@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <SchemaTree.h>
+#include "ui_MainWindow.h"
 
 /**
  * @class ShemaProgram
@@ -27,7 +28,7 @@ public:
      * ShemaProgram program("!((A|B)&!C)");
      * @endcode
      */
-    explicit SchemaProgram(const QString& text);
+    explicit SchemaProgram(const QString& text, QGraphicsView* view);
 
     ~SchemaProgram() = default;
 

@@ -121,7 +121,7 @@ std::vector<std::unique_ptr<SchemaTree::Node>> SchemaTree::buildTreeHelper(const
         QChar c = expression[i];
         if (c == '(') depth++;
         else if (c == ')') depth--;
-        else if (depth == 0 && (c == '&' || c == '|')) {
+        else if (depth == 0 && (c == '&' || c == '|'|| c == '^')) {
             opPositions.push_back(i);
             opChars.push_back(c);
         }
@@ -201,3 +201,20 @@ void SchemaTree::printNode(const Node* node, const QString& prefix, bool isLast)
         printNode(node->children[i].get(), childPrefix, last);
     }
 }
+
+// Получить количество элементов типа VAR
+int SchemaTree::countVarNodes(const std::unique_ptr<Node>& node) const
+{
+    if (!node) return 0;
+
+    int count = 0;
+
+    if (node->type == NodeType::VAR)
+        ++count;
+
+    for (const auto& child : node->children)
+        count += countVarNodes(child);
+
+    return count;
+}
+
