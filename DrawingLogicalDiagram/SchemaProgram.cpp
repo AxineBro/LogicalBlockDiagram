@@ -1,6 +1,7 @@
 #include "SchemaProgram.h"
 #include "DrawingDiagram.h"
 
+// Конструктор программы построения схемы.
 SchemaProgram::SchemaProgram(const QString& text, QGraphicsView* view)
 {
     SchemaTree tree(text);
