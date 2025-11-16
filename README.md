@@ -61,7 +61,7 @@
 
 ### Запуск и работа с программой
 
-1. **Скачайте и распакуйте**: [Скачайте ZIP архив](https://github.com/AxineBro/LogicalBlockDiagram/blob/main/DrawingLogicalDiagram_Release.zip) и распакуйте его
+1. **Скачайте и распакуйте**: [Скачайте ZIP архив](https://github.com/AxineBro/LogicalBlockDiagram/raw/refs/heads/main/DrawingLogicalDiagram_Release.zip) и распакуйте его
 2. **Запустите программу**: запустите исполняемый файл приложения
 3. **Ввод выражения**: введите логическое выражение в поле "Y ="
    - Пример: `!((A & B) | C)`
